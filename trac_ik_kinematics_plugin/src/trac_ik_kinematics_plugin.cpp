@@ -5,25 +5,25 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
-    1. Redistributions of source code must retain the above copyright notice, 
+    1. Redistributions of source code must retain the above copyright notice,
        this list of conditions and the following disclaimer.
 
     2. Redistributions in binary form must reproduce the above copyright notice,
-       this list of conditions and the following disclaimer in the documentation 
+       this list of conditions and the following disclaimer in the documentation
        and/or other materials provided with the distribution.
 
     3. Neither the name of the copyright holder nor the names of its contributors
-       may be used to endorse or promote products derived from this software 
+       may be used to endorse or promote products derived from this software
        without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
 IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
 ********************************************************************************/
@@ -162,7 +162,7 @@ namespace trac_ik_kinematics_plugin
                           moveit_msgs::MoveItErrorCodes &error_code,
                           const std::vector<double> &consistency_limits,
                           const kinematics::KinematicsQueryOptions &options) const;
-    
+
 
 
     /**
@@ -223,7 +223,7 @@ namespace trac_ik_kinematics_plugin
     ROS_DEBUG_STREAM_NAMED("trac_ik","Reading joints and links from URDF");
 
     KDL::Tree tree;
-    
+
     if (!kdl_parser::treeFromUrdfModel(robot_model, tree)) {
       ROS_FATAL("Failed to extract kdl tree from xml robot description");
       return false;
@@ -233,9 +233,9 @@ namespace trac_ik_kinematics_plugin
       ROS_FATAL("Couldn't find chain %s to %s",base_name.c_str(),tip_name.c_str());
       return false;
     }
-    
+
     num_joints_=chain.getNrOfJoints();
-    
+
     std::vector<KDL::Segment> chain_segs = chain.segments;
 
     boost::shared_ptr<const urdf::Joint> joint;
@@ -291,7 +291,7 @@ namespace trac_ik_kinematics_plugin
                     node_handle.getNamespace().c_str(),
                     (group_name+"/solve_type").c_str());
 
-    node_handle.param(group_name+"/solve_type", solve_type, std::string("Speed"));
+    node_handle.param(group_name+"/solve_type", solve_type, std::string("Distance"));
     ROS_INFO_NAMED("trac_ik plugin","Using solve type %s",solve_type.c_str());
 
     active_ = true;
@@ -487,7 +487,7 @@ namespace trac_ik_kinematics_plugin
         in(z)=ik_seed_state[z];
 
     KDL::Twist bounds=KDL::Twist::Zero();
-    
+
     if (position_ik_)  {
       bounds.rot.x(std::numeric_limits<float>::max());
       bounds.rot.y(std::numeric_limits<float>::max());
@@ -510,7 +510,7 @@ namespace trac_ik_kinematics_plugin
         }
         solvetype = TRAC_IK::Speed;
     }
-    
+
     TRAC_IK::TRAC_IK ik_solver(chain, joint_min, joint_max, timeout, epsilon, solvetype);
 
     int rc = ik_solver.CartToJnt(in, frame, out, bounds);
@@ -522,7 +522,7 @@ namespace trac_ik_kinematics_plugin
       for (uint z=0; z< num_joints_; z++)
         solution[z]=out(z);
 
-      // check for collisions if a callback is provided 
+      // check for collisions if a callback is provided
       if( !solution_callback.empty() )
         {
           solution_callback(ik_pose, solution, error_code);
